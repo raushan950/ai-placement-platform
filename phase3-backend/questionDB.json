@@ -1,0 +1,75 @@
+{
+  "Arrays": [
+    { "name": "Two Sum", "platform": "LeetCode", "difficulty": "Easy", "link": "https://leetcode.com/problems/two-sum/" },
+    { "name": "Subarray with Given Sum", "platform": "GFG", "difficulty": "Medium", "link": "https://practice.geeksforgeeks.org/problems/subarray-with-given-sum-1587115621/1" },
+    { "name": "Maximum Subarray (Kadane)", "platform": "CodeStudio", "difficulty": "Medium", "link": "https://www.codingninjas.com/codestudio/problems/maximum-subarray-sum" },
+    { "name": "Merge Intervals", "platform": "LeetCode", "difficulty": "Medium", "link": "https://leetcode.com/problems/merge-intervals/" },
+    { "name": "Sort an array of 0s, 1s and 2s", "platform": "GFG", "difficulty": "Easy", "link": "https://practice.geeksforgeeks.org/problems/sort-an-array-of-0s-1s-and-2s4231/1" },
+    { "name": "Next Permutation", "platform": "LeetCode", "difficulty": "Medium", "link": "https://leetcode.com/problems/next-permutation/" },
+    { "name": "Array Manipulation", "platform": "HackerRank", "difficulty": "Hard", "link": "https://www.hackerrank.com/challenges/crush/problem" }
+  ],
+  "Strings": [
+    { "name": "Valid Palindrome", "platform": "LeetCode", "difficulty": "Easy", "link": "https://leetcode.com/problems/valid-palindrome/" },
+    { "name": "Reverse words in a given string", "platform": "GFG", "difficulty": "Easy", "link": "https://practice.geeksforgeeks.org/problems/reverse-words-in-a-given-string5459/1" },
+    { "name": "Longest Substring Without Repeating Characters", "platform": "CodeStudio", "difficulty": "Medium", "link": "https://www.codingninjas.com/codestudio/problems/longest-substring-without-repeating-characters" },
+    { "name": "Anagram", "platform": "GFG", "difficulty": "Easy", "link": "https://practice.geeksforgeeks.org/problems/anagram-1587115620/1" },
+    { "name": "Sherlock and the Valid String", "platform": "HackerRank", "difficulty": "Medium", "link": "https://www.hackerrank.com/challenges/sherlock-and-valid-string/problem" }
+  ],
+  "Two Pointers & Sliding Window": [
+    { "name": "3Sum", "platform": "LeetCode", "difficulty": "Medium", "link": "https://leetcode.com/problems/3sum/" },
+    { "name": "Count distinct elements in every window", "platform": "GFG", "difficulty": "Easy", "link": "https://practice.geeksforgeeks.org/problems/count-distinct-elements-in-every-window/1" },
+    { "name": "Trapping Rain Water", "platform": "CodeStudio", "difficulty": "Hard", "link": "https://www.codingninjas.com/codestudio/problems/trapping-rainwater" },
+    { "name": "Minimum Window Substring", "platform": "LeetCode", "difficulty": "Hard", "link": "https://leetcode.com/problems/minimum-window-substring/" }
+  ],
+  "Linked List": [
+    { "name": "Reverse a linked list", "platform": "GFG", "difficulty": "Easy", "link": "https://practice.geeksforgeeks.org/problems/reverse-a-linked-list/1" },
+    { "name": "Merge Two Sorted Lists", "platform": "LeetCode", "difficulty": "Easy", "link": "https://leetcode.com/problems/merge-two-sorted-lists/" },
+    { "name": "Detect Loop in linked list", "platform": "GFG", "difficulty": "Medium", "link": "https://practice.geeksforgeeks.org/problems/detect-loop-in-linked-list/1" },
+    { "name": "Remove Nth Node From End of List", "platform": "CodeStudio", "difficulty": "Medium", "link": "https://www.codingninjas.com/codestudio/problems/delete-kth-node-from-end" },
+    { "name": "Add Two Numbers", "platform": "LeetCode", "difficulty": "Medium", "link": "https://leetcode.com/problems/add-two-numbers/" }
+  ],
+  "Trees": [
+    { "name": "Height of Binary Tree", "platform": "GFG", "difficulty": "Easy", "link": "https://practice.geeksforgeeks.org/problems/height-of-binary-tree/1" },
+    { "name": "Maximum Depth of Binary Tree", "platform": "LeetCode", "difficulty": "Easy", "link": "https://leetcode.com/problems/maximum-depth-of-binary-tree/" },
+    { "name": "Check for BST", "platform": "GFG", "difficulty": "Medium", "link": "https://practice.geeksforgeeks.org/problems/check-for-bst/1" },
+    { "name": "Lowest Common Ancestor of a Binary Tree", "platform": "CodeStudio", "difficulty": "Medium", "link": "https://www.codingninjas.com/codestudio/problems/lca-of-binary-tree" },
+    { "name": "Validate Binary Search Tree", "platform": "LeetCode", "difficulty": "Medium", "link": "https://leetcode.com/problems/validate-binary-search-tree/" }
+  ],
+  "Graphs": [
+    { "name": "BFS of graph", "platform": "GFG", "difficulty": "Easy", "link": "https://practice.geeksforgeeks.org/problems/bfs-traverse-of-graph/1" },
+    { "name": "Number of Islands", "platform": "LeetCode", "difficulty": "Medium", "link": "https://leetcode.com/problems/number-of-islands/" },
+    { "name": "Detect cycle in a directed graph", "platform": "GFG", "difficulty": "Medium", "link": "https://practice.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1" },
+    { "name": "Course Schedule (Topological Sort)", "platform": "CodeStudio", "difficulty": "Medium", "link": "https://www.codingninjas.com/codestudio/problems/course-schedule" },
+    { "name": "Word Ladder", "platform": "LeetCode", "difficulty": "Hard", "link": "https://leetcode.com/problems/word-ladder/" }
+  ],
+  "Dynamic Programming": [
+    { "name": "0 - 1 Knapsack Problem", "platform": "GFG", "difficulty": "Medium", "link": "https://practice.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1" },
+    { "name": "Climbing Stairs", "platform": "LeetCode", "difficulty": "Easy", "link": "https://leetcode.com/problems/climbing-stairs/" },
+    { "name": "Coin Change", "platform": "CodeStudio", "difficulty": "Medium", "link": "https://www.codingninjas.com/codestudio/problems/ways-to-make-coin-change" },
+    { "name": "Longest Increasing Subsequence", "platform": "GFG", "difficulty": "Medium", "link": "https://practice.geeksforgeeks.org/problems/longest-increasing-subsequence-1587115620/1" },
+    { "name": "Longest Common Subsequence", "platform": "LeetCode", "difficulty": "Medium", "link": "https://leetcode.com/problems/longest-common-subsequence/" }
+  ],
+  "Core CS (OS, DBMS, CN)": [
+    { "name": "ACID Properties in DBMS", "platform": "GFG", "difficulty": "Medium", "link": "https://www.geeksforgeeks.org/acid-properties-in-dbms/" },
+    { "name": "SQL 50 Study Plan", "platform": "LeetCode", "difficulty": "Medium", "link": "https://leetcode.com/study-plan/sql/" },
+    { "name": "CPU Scheduling in Operating Systems", "platform": "GFG", "difficulty": "Hard", "link": "https://www.geeksforgeeks.org/cpu-scheduling-in-operating-systems/" },
+    { "name": "Deadlocks in OS", "platform": "TutorialsPoint", "difficulty": "Medium", "link": "https://www.tutorialspoint.com/operating_system/os_deadlocks.htm" },
+    { "name": "Layers of OSI Model", "platform": "GFG", "difficulty": "Easy", "link": "https://www.geeksforgeeks.org/layers-of-osi-model/" }
+  ],
+  "Aptitude & Reasoning": [
+    { "name": "Time and Work Problems", "platform": "IndiaBix", "difficulty": "Medium", "link": "https://www.indiabix.com/aptitude/time-and-work/" },
+    { "name": "Profit and Loss", "platform": "IndiaBix", "difficulty": "Medium", "link": "https://www.indiabix.com/aptitude/profit-and-loss/" },
+    { "name": "Blood Relation Test", "platform": "IndiaBix", "difficulty": "Hard", "link": "https://www.indiabix.com/logical-reasoning/blood-relation-test/" },
+    { "name": "Number Series", "platform": "IndiaBix", "difficulty": "Medium", "link": "https://www.indiabix.com/logical-reasoning/number-series/" },
+    { "name": "Syllogism Basics", "platform": "FacePrep", "difficulty": "Medium", "link": "https://www.faceprep.in/logical-reasoning/syllogism/" }
+  ],
+  "System Design": [
+    { "name": "Design URL Shortener (TinyURL)", "platform": "Educative", "difficulty": "Medium", "link": "https://www.educative.io/courses/grokking-the-system-design-interview/m2ygV4E81AR" },
+    { "name": "Designing a Key-Value Store", "platform": "SystemDesignPrimer", "difficulty": "Hard", "link": "https://github.com/donnemartin/system-design-primer" },
+    { "name": "Design WhatsApp", "platform": "GFG", "difficulty": "Hard", "link": "https://www.geeksforgeeks.org/system-design-whatsapp/" }
+  ],
+  "HR & Mock Interviews": [
+    { "name": "Tell me about yourself (STAR format)", "platform": "YouTube", "difficulty": "", "link": "https://www.youtube.com/watch?v=wexznClKcEA" },
+    { "name": "Why should we hire you?", "platform": "IndiaBix", "difficulty": "", "link": "https://www.indiabix.com/hr-interview/why-should-we-hire-you/" }
+  ]
+}

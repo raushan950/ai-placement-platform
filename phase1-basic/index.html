@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Placement Preparation Assistant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Placement Preparation Assistant</h1>
+    <p class="subtitle">AI-Powered Roadmap Generator</p>
+    
+    <div class="form-group">
+      <label for="company">Target Company Name:</label>
+      <input type="text" id="company" placeholder="e.g., Google, TCS, Amazon">
+    </div>
+    
+    <div class="form-group">
+      <label for="days">Days to Prepare (e.g., 30):</label>
+      <input type="number" id="days" placeholder="Number of days">
+    </div>
+
+    <button onclick="generateRoadmap()">Generate Roadmap</button>
+    
+    <div id="roadmap-output" class="hidden">
+      <h2 id="roadmap-title"></h2>
+      <div id="roadmap-content"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
