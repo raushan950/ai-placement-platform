@@ -484,3 +484,328 @@ main.content-area {
 .status-accepted { color: var(--success); font-weight: bold; font-size: 1.2rem;}
 .status-wa { color: var(--danger); font-weight: bold; font-size: 1.2rem;}
 .status-running { color: var(--warning); font-weight: bold; font-size: 1.2rem;}
+
+/* ENHANCED RESULT DISPLAY */
+.result-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.test-result-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+}
+
+.test-status-icon {
+  font-size: 2.5rem;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.test-status-text h2 {
+  margin: 0 0 4px 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.test-status-text p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.testcase-counter {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.testcase-counter.all-passed { color: var(--success); }
+.testcase-counter.partial { color: var(--warning); }
+.testcase-counter.failed { color: var(--danger); }
+
+.failed-testcase {
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.failed-testcase h4 {
+  color: var(--danger);
+  margin: 0 0 16px 0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.test-io-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.test-io-block {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.test-io-block.error {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.test-io-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.test-io-content {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  color: white;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.test-io-content.output-mismatch {
+  color: #fca5a5;
+}
+
+.test-expected {
+  color: #6ee7b7;
+}
+
+.submit-result-card {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.submit-result-card.accepted {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.submit-result-card.rejected {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.submit-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.9rem;
+}
+
+.submit-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.submit-stat strong {
+  color: white;
+}
+
+.simulator-setup {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px;
+  text-align: center;
+}
+
+.simulator-setup .input-group {
+  text-align: left;
+}
+
+.custom-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.custom-list li {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  padding-left: 20px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.custom-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--success);
+  font-weight: bold;
+}
+
+/* ENHANCED PROBLEM PANEL */
+.problem-panel {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.problem-panel:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.problem-panel h2 {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.5px;
+}
+
+.problem-panel p {
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+.problem-panel h4 {
+  color: white;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.problem-panel ul {
+  padding-left: 20px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.problem-panel ul li {
+  margin-bottom: 8px;
+  font-family: 'Fira Code', monospace;
+}
+
+/* ENHANCED BADGE STYLES */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.badge:hover {
+  transform: scale(1.05);
+}
+
+/* ENHANCED EDITOR STYLING */
+.monaco-editor {
+  border-radius: 0 !important;
+}
+
+.code-area,
+.testcase-area {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* SMOOTH TRANSITIONS */
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* IMPROVED SCROLLBAR */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* BUTTON IMPROVEMENTS */
+.btn-primary,
+.btn-secondary {
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.btn-primary:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+.btn-secondary:not(:disabled):active {
+  transform: scale(0.98);
+}

@@ -279,29 +279,38 @@ export default function InterviewSimulator({ company }) {
        
        {!isInterviewActive && !isSessionSummary && (
          <div className="simulator-setup glass-panel">
-           <p className="subtext">Configure your interview for {company || 'your target company'}.</p>
+           <div style={{marginBottom:'32px', textAlign:'center'}}>
+              <h1 style={{margin:'0 0 8px 0', fontSize:'2rem', fontWeight:700}}>Interview Simulator</h1>
+              <p className="subtext" style={{margin:0}}>Prepare for {company || 'your target company'} with realistic interview questions</p>
+           </div>
+           <div style={{background:'rgba(16, 185, 129, 0.1)', border:'1px solid rgba(16, 185, 129, 0.3)', padding:'12px 16px', borderRadius:'8px', marginBottom:'24px', display:'flex', alignItems:'center', gap:'12px'}}>
+              <span style={{fontSize:'1.2rem'}}>✅</span>
+              <p style={{margin:0, color:'var(--success)', fontSize:'0.95rem'}}>AI Code Execution Simulator Connected</p>
+           </div>
            <div className="grid-form">
-             <div style={{gridColumn: '1 / -1'}} className="input-group">
-               <p style={{color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', padding: '10px', borderRadius: '5px', display: 'inline-block'}}><span style={{marginRight: '5px'}}>☑️</span> AI Code Execution Simulator securely connected.</p>
-             </div>
              <div className="input-group">
                <label>Question Type</label>
-               <select value={interviewConfig.type} onChange={(e)=>setInterviewConfig({...interviewConfig, type: e.target.value})}>
-                 <option value="DSA">Data Structures & Algorithms (LeetCode Style)</option>
-                 <option value="Technical">Technical Core</option>
-                 <option value="HR">Behavioral (Text Only)</option>
+               <select value={interviewConfig.type} onChange={(e)=>setInterviewConfig({...interviewConfig, type: e.target.value})} style={{background:'rgba(0,0,0,0.2)', borderRadius:'8px', padding:'12px 16px'}}>
+                 <option value="DSA">📊 Data Structures & Algorithms (LeetCode Style)</option>
+                 <option value="Technical">💻 Technical Core Knowledge</option>
+                 <option value="HR">🎤 Behavioral / HR</option>
                </select>
              </div>
              <div className="input-group">
-               <label>Difficulty</label>
-               <select value={interviewConfig.difficulty} onChange={(e)=>setInterviewConfig({...interviewConfig, difficulty: e.target.value})}>
-                 <option value="Easy">Easy</option>
-                 <option value="Medium">Medium</option>
-                 <option value="Hard">Hard</option>
+               <label>Difficulty Level</label>
+               <select value={interviewConfig.difficulty} onChange={(e)=>setInterviewConfig({...interviewConfig, difficulty: e.target.value})} style={{background:'rgba(0,0,0,0.2)', borderRadius:'8px', padding:'12px 16px'}}>
+                 <option value="Easy">🟢 Easy</option>
+                 <option value="Medium">🟡 Medium</option>
+                 <option value="Hard">🔴 Hard</option>
                </select>
              </div>
            </div>
-           <button className="btn-primary mt-4" onClick={startInterview}>Start Interview Simulator</button>
+           <button className="btn-primary mt-4" onClick={startInterview} style={{width:'100%', padding:'14px 20px', fontSize:'1rem', marginTop:'32px', justifyContent:'center'}}>
+             🚀 Start Interview Session
+           </button>
+           <p style={{textAlign:'center', color:'var(--text-muted)', fontSize:'0.9rem', marginTop:'20px', marginBottom:0}}>
+              You will solve up to 3 interview questions • Session time is tracked
+           </p>
          </div>
        )}
 
@@ -326,10 +335,24 @@ export default function InterviewSimulator({ company }) {
                      <h4 className="mt-4" style={{color:'white'}}>Examples:</h4>
                      <div style={{display:'flex', flexDirection:'column', gap:'15px'}}>
                         {currentQuestion.examples?.map((ex, i) => (
-                           <div key={i} style={{background:'rgba(255,255,255,0.05)', padding:'15px', borderRadius:'8px', borderLeft:'3px solid var(--border)'}}>
-                              <p style={{margin:'0 0 5px 0'}}><strong>Input:</strong> <span style={{fontFamily:'Fira Code, monospace', opacity:0.9}}>{ex.input}</span></p>
-                              <p style={{margin:'0 0 5px 0'}}><strong>Output:</strong> <span style={{fontFamily:'Fira Code, monospace', opacity:0.9}}>{ex.output}</span></p>
-                              {ex.explanation && <p style={{margin:'0', opacity:0.8}}><strong>Explanation:</strong> {ex.explanation}</p>}
+                           <div key={i} style={{background:'rgba(139, 92, 246, 0.08)', padding:'16px', borderRadius:'8px', border:'1px solid rgba(139, 92, 246, 0.3)', transition:'all 0.2s'}}>
+                              <p style={{margin:'0 0 8px 0', fontSize:'0.85rem', fontWeight:600, color:'var(--primary)', textTransform:'uppercase', letterSpacing:'0.5px'}}>Example {i+1}</p>
+                              <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px', marginBottom:'8px'}}>
+                                 <div>
+                                    <p style={{margin:'0 0 4px 0', fontSize:'0.85rem', color:'var(--text-muted)', fontWeight:500}}>Input:</p>
+                                    <code style={{fontFamily:'Fira Code, monospace', fontSize:'0.9rem', color:'#60a5fa', background:'rgba(0,0,0,0.2)', padding:'8px', borderRadius:'4px', display:'block', whiteSpace:'pre-wrap'}}>{ex.input}</code>
+                                 </div>
+                                 <div>
+                                    <p style={{margin:'0 0 4px 0', fontSize:'0.85rem', color:'var(--text-muted)', fontWeight:500}}>Output:</p>
+                                    <code style={{fontFamily:'Fira Code, monospace', fontSize:'0.9rem', color:'#6ee7b7', background:'rgba(0,0,0,0.2)', padding:'8px', borderRadius:'4px', display:'block', whiteSpace:'pre-wrap'}}>{ex.output}</code>
+                                 </div>
+                              </div>
+                              {ex.explanation && (
+                                 <div>
+                                    <p style={{margin:'0 0 4px 0', fontSize:'0.85rem', color:'var(--text-muted)', fontWeight:500}}>Explanation:</p>
+                                    <p style={{margin:'0', fontSize:'0.9rem', color:'white', lineHeight:'1.5'}}>{ex.explanation}</p>
+                                 </div>
+                              )}
                            </div>
                         ))}
                      </div>
@@ -380,7 +403,7 @@ export default function InterviewSimulator({ company }) {
                           {isExecuting ? '⏳ Running...' : '▶ Run Code'}
                         </button>
                         <button className="btn-primary" style={{padding: '6px 16px', fontSize: '0.85rem', background: '#10b981', color:'#000'}} onClick={submitCodeDSA} disabled={isExecuting}>
-                          Submit
+                          Submit All
                         </button>
                      </div>
                   </div>
@@ -404,86 +427,145 @@ export default function InterviewSimulator({ company }) {
                   </div>
                   <div className="panel-content">
                      {activeTabRight === 'testcases' && (
-                        <>
-                           <div className="testcase-tabs">
-                              {currentQuestion.testcases?.filter(t=>!t.hidden).map((tc, i) => (
-                                 <div key={i} className={`testcase-tab ${activeTestcaseIndex===i?'active':''}`} onClick={()=>{setActiveTestcaseIndex(i); setCustomInput(tc.input);}}>
-                                    Case {i+1}
-                                 </div>
-                              ))}
+                        <div style={{display:'flex', flexDirection:'column', height:'100%'}}>
+                           <div style={{marginBottom:'16px'}}>
+                              <p style={{fontSize:'0.9rem', color:'var(--text-muted)', marginBottom:'12px', fontWeight:500, textTransform:'uppercase', letterSpacing:'0.5px'}}>📋 Test Cases ({currentQuestion.testcases?.filter(t=>!t.hidden).length || 0})</p>
+                              <div className="testcase-tabs">
+                                 {currentQuestion.testcases?.filter(t=>!t.hidden).map((tc, i) => (
+                                    <div key={i} className={`testcase-tab ${activeTestcaseIndex===i?'active':''}`} onClick={()=>{setActiveTestcaseIndex(i); setCustomInput(tc.input);}} style={{cursor:'pointer', transition:'all 0.2s'}}>
+                                       Case {i+1}
+                                    </div>
+                                 ))}
+                              </div>
                            </div>
-                           <p style={{fontSize:'0.85rem', color:'var(--text-muted)', marginBottom:'5px'}}>Input:</p>
-                           <textarea className="custom-textarea" value={customInput} onChange={(e)=>setCustomInput(e.target.value)} />
-                        </>
+                           <div style={{flex:1, display:'flex', flexDirection:'column', gap:'12px'}}>
+                              <div>
+                                 <span className="test-io-label">Input</span>
+                                 <textarea className="custom-textarea" value={customInput} onChange={(e)=>setCustomInput(e.target.value)} style={{height:'140px'}} />
+                              </div>
+                              <div>
+                                 <span className="test-io-label">Expected Output</span>
+                                 <div style={{background:'rgba(0,0,0,0.3)', border:'1px solid var(--border)', borderRadius:'6px', padding:'10px', fontFamily:"'Fira Code', monospace", fontSize:'0.9rem', color:'#6ee7b7', maxHeight:'100px', overflowY:'auto', whiteSpace:'pre-wrap'}}>
+                                    {currentQuestion.testcases?.[activeTestcaseIndex]?.expected_output || '(No expected output)'}
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
                      )}
                      
                      {activeTabRight === 'result' && (
-                        <>
+                        <div className="result-container">
                            {submitResult ? (
-                              <div>
-                                 <h2 className={submitResult.status === 'Accepted' ? 'status-accepted' : 'status-wa'}>{submitResult.status}</h2>
-                                 <p style={{color:'white'}}>Passed: {submitResult.passed} / {submitResult.total} testcases</p>
-                                 {submitResult.status === 'Accepted' && <p>Runtime: {submitResult.time}</p>}
-                                 
+                              <div className="fade-in">
+                                 <div className={`test-result-header ${submitResult.status === 'Accepted' ? 'accepted' : 'rejected'}`}>
+                                    <div className="test-status-icon">
+                                       {submitResult.status === 'Accepted' ? '✅' : '❌'}
+                                    </div>
+                                    <div className="test-status-text">
+                                       <h2 style={{color: submitResult.status === 'Accepted' ? 'var(--success)' : 'var(--danger)'}}>{submitResult.status}</h2>
+                                       <p>Test Submission Result</p>
+                                    </div>
+                                    <div className={`testcase-counter ${submitResult.passed === submitResult.total ? 'all-passed' : submitResult.passed > 0 ? 'partial' : 'failed'}`}>
+                                       <span>{submitResult.passed}</span>
+                                       <span style={{opacity: 0.5}}>/</span>
+                                       <span>{submitResult.total}</span>
+                                    </div>
+                                 </div>
+
                                  {submitResult.failedCase && (
-                                     <div className="mt-4" style={{background:'rgba(239, 68, 68, 0.1)', border:'1px solid rgba(239, 68, 68, 0.3)', padding:'15px', borderRadius:'8px'}}>
+                                     <div className="failed-testcase fade-in">
+                                        <h4>🔍 First Failed Test Case</h4>
                                         {submitResult.failedCase.compileErr ? (
-                                           <pre style={{color:'#fca5a5', margin:0, background:'transparent', border:'none', whiteSpace:'pre-wrap'}}>{submitResult.failedCase.compileErr}</pre>
+                                           <div>
+                                              <span className="test-io-label">Error Details</span>
+                                              <pre style={{color:'#fca5a5', margin:0, background:'rgba(0,0,0,0.3)', padding:'12px', borderRadius:'6px', border:'1px solid rgba(239,68,68,0.3)', whiteSpace:'pre-wrap'}}>{submitResult.failedCase.compileErr}</pre>
+                                           </div>
                                         ) : (
-                                           <>
-                                             <div className="execution-row"><span className="execution-label">Input</span> <pre>{submitResult.failedCase.hidden ? "Hidden Testcase" : submitResult.failedCase.input}</pre></div>
-                                             <div className="execution-row"><span className="execution-label">Output</span> <pre style={{color:'#fca5a5'}}>{submitResult.failedCase.output}</pre></div>
-                                             <div className="execution-row"><span className="execution-label">Expected</span> <pre style={{color:'#6ee7b7'}}>{submitResult.failedCase.expected}</pre></div>
-                                           </>
+                                           <div className="test-io-grid">
+                                             <div className="test-io-block">
+                                                <span className="test-io-label">Input</span>
+                                                <div className="test-io-content">{submitResult.failedCase.hidden ? "🔒 Hidden Testcase" : submitResult.failedCase.input}</div>
+                                             </div>
+                                             <div className="test-io-block">
+                                                <span className="test-io-label">Expected Output</span>
+                                                <div className="test-io-content test-expected">{submitResult.failedCase.expected}</div>
+                                             </div>
+                                             <div className="test-io-block error" style={{gridColumn: '1 / -1'}}>
+                                                <span className="test-io-label">Your Output</span>
+                                                <div className="test-io-content output-mismatch">{submitResult.failedCase.output}</div>
+                                             </div>
+                                           </div>
                                         )}
                                      </div>
                                  )}
                               </div>
                            ) : executionResult ? (
-                              <div>
-                                 <h2 className={executionResult.status === 'Accepted' ? 'status-accepted' : executionResult.status === 'Running...' ? 'status-running' : executionResult.status === 'Finished' ? 'status-accepted' : 'status-wa'}>{executionResult.status}</h2>
-                                 {executionResult.status !== 'Running...' && !executionResult.status.includes('Error') && (
-                                   <div style={{display:'flex', gap:'15px', marginBottom:'20px'}}>
-                                     <span style={{fontSize:'0.85rem', color:'var(--text-muted)'}}>Runtime: {executionResult.time}</span>
-                                     <span style={{fontSize:'0.85rem', color:'var(--text-muted)'}}>Memory: N/A - Simulation</span>
-                                   </div>
+                              <div className="fade-in">
+                                 <div className={`test-result-header ${executionResult.status === 'Accepted' || executionResult.status === 'Finished' ? 'accepted' : 'rejected'}`}>
+                                    <div className="test-status-icon">
+                                       {executionResult.status === 'Running...' ? '⏳' :
+                                        executionResult.status === 'Accepted' || executionResult.status === 'Finished' ? '✅' :
+                                        executionResult.status.includes('Error') ? '⚠️' : '❌'}
+                                    </div>
+                                    <div className="test-status-text">
+                                       <h2 style={{color:
+                                          executionResult.status === 'Accepted' || executionResult.status === 'Finished' ? 'var(--success)' :
+                                          executionResult.status === 'Running...' ? 'var(--warning)' :
+                                          'var(--danger)'
+                                       }}>{executionResult.status}</h2>
+                                       <p>Single Test Execution</p>
+                                    </div>
+                                 </div>
+
+                                 {executionResult.status !== 'Running...' && (
+                                    <div className="submit-meta" style={{marginTop: '16px'}}>
+                                       <div className="submit-stat">
+                                          <span>⏱️</span>
+                                          <span><strong>Runtime:</strong> {executionResult.time}</span>
+                                       </div>
+                                       <div className="submit-stat">
+                                          <span>💾</span>
+                                          <span><strong>Memory:</strong> N/A (Simulation)</span>
+                                       </div>
+                                    </div>
                                  )}
-                                 
+
                                  {executionResult.compileErr ? (
-                                    <div className="execution-row">
-                                      <span className="execution-label">Error</span>
-                                      <pre style={{color:'#fca5a5', whiteSpace:'pre-wrap'}}>{executionResult.compileErr}</pre>
+                                    <div style={{background:'rgba(239, 68, 68, 0.08)', border:'1px solid rgba(239, 68, 68, 0.3)', borderRadius:'var(--radius-md)', padding:'16px', marginTop:'16px'}}>
+                                       <span className="test-io-label">⚠️ Compilation Error</span>
+                                       <pre style={{color:'#fca5a5', whiteSpace:'pre-wrap', margin:'8px 0 0 0', fontFamily: "'Fira Code', monospace", fontSize:'0.9rem'}}>{executionResult.compileErr}</pre>
                                     </div>
                                  ) : (
-                                    <>
-                                     <div className="execution-row">
-                                        <span className="execution-label">Input</span>
-                                        <pre>{executionResult.input || 'N/A'}</pre>
+                                    <div className="test-io-grid" style={{marginTop: '16px'}}>
+                                     <div className="test-io-block">
+                                        <span className="test-io-label">Input</span>
+                                        <div className="test-io-content">{executionResult.input || 'N/A'}</div>
                                      </div>
-                                     <div className="execution-row">
-                                        <span className="execution-label">Output</span>
-                                        <pre style={{color: executionResult.status.includes('Error') ? '#fca5a5' : '#e2e8f0'}}>{executionResult.output || 'No output.'}</pre>
+                                     <div className="test-io-block">
+                                        <span className="test-io-label">Expected</span>
+                                        <div className="test-io-content test-expected">{executionResult.expected || '-'}</div>
                                      </div>
-                                     {executionResult.expected && (
-                                        <div className="execution-row">
-                                           <span className="execution-label">Expected</span>
-                                           <pre>{executionResult.expected}</pre>
-                                        </div>
-                                     )}
-                                   </>
+                                     <div className={`test-io-block ${executionResult.status.includes('Error') ? 'error' : ''}`} style={{gridColumn: '1 / -1'}}>
+                                        <span className="test-io-label">Your Output</span>
+                                        <div className={`test-io-content ${executionResult.status.includes('Error') ? 'output-mismatch' : ''}`}>{executionResult.output || 'No output.'}</div>
+                                     </div>
+                                   </div>
                                  )}
                               </div>
                            ) : (
-                              <p style={{color:'var(--text-muted)'}}>Run your code to see results here.</p>
+                              <div style={{textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)'}}>
+                                 <p style={{fontSize: '1.1rem', margin: '0 0 8px 0'}}>📝 No test results yet</p>
+                                 <p style={{margin: 0}}>Click "Run Code" to test your solution</p>
+                              </div>
                            )}
 
                            {aiFeedback && (
-                               <div className="mt-4 fade-in" style={{background:'rgba(59, 130, 246, 0.1)', border:'1px solid rgba(59, 130, 246, 0.3)', padding:'15px', borderRadius:'8px'}}>
-                                   <h4 style={{color:'#60a5fa', margin:'0 0 10px 0'}}>🤖 AI Tutor Feedback</h4>
+                               <div className="fade-in" style={{background:'rgba(59, 130, 246, 0.08)', border:'1px solid rgba(59, 130, 246, 0.3)', borderRadius:'var(--radius-md)', padding:'16px', marginTop:'0'}}>
+                                   <h4 style={{color:'#60a5fa', margin:'0 0 10px 0', display:'flex', alignItems:'center', gap:'8px'}}>🤖 AI Feedback</h4>
                                    <p style={{color:'var(--text-muted)', fontSize:'0.9rem', lineHeight:'1.5', margin:0, whiteSpace:'pre-line'}}>{aiFeedback}</p>
                                </div>
                            )}
-                        </>
+                        </div>
                      )}
                   </div>
                </div>
@@ -516,10 +598,53 @@ export default function InterviewSimulator({ company }) {
        )}
 
        {isSessionSummary && (
-         <div className="session-summary glass-panel fade-in mt-4">
-            <h2>Session Completed!</h2>
-            <p className="subtext mt-2">You answered {sessionHistory.length} questions.</p>
-            <button className="btn-primary mt-4" onClick={()=>setIsSessionSummary(false)}>Start New Interview</button>
+         <div className="session-summary glass-panel fade-in mt-4" style={{maxWidth:'700px', margin:'40px auto', padding:'40px', textAlign:'center'}}>
+            <div style={{marginBottom:'24px'}}>
+               <h2 style={{margin:'0 0 8px 0', fontSize:'2rem', fontWeight:700}}>🎉 Session Complete!</h2>
+               <p className="subtext" style={{margin:0}}>Great effort! You completed your interview session</p>
+            </div>
+
+            <div style={{background:'rgba(139, 92, 246, 0.08)', border:'1px solid rgba(139, 92, 246, 0.3)', borderRadius:'var(--radius-md)', padding:'24px', marginBottom:'24px'}}>
+               <p style={{color:'var(--text-muted)', fontSize:'0.9rem', margin:'0 0 12px 0', textTransform:'uppercase', letterSpacing:'0.5px', fontWeight:600}}>Performance Summary</p>
+               <div style={{display:'flex', justifyContent:'space-around', gap:'16px', flexWrap:'wrap'}}>
+                  <div>
+                     <p style={{fontSize:'2rem', fontWeight:800, color:'white', margin:0}}>{sessionHistory.length}</p>
+                     <p style={{color:'var(--text-muted)', fontSize:'0.9rem', margin:'4px 0 0 0'}}>Questions Solved</p>
+                  </div>
+                  <div>
+                     <p style={{fontSize:'2rem', fontWeight:800, color:'var(--success)', margin:0}}>
+                        {sessionHistory.reduce((acc, h) => acc + (h.evaluation?.scores?.overall || 0), 0)}
+                     </p>
+                     <p style={{color:'var(--text-muted)', fontSize:'0.9rem', margin:'4px 0 0 0'}}>Total Score</p>
+                  </div>
+                  <div>
+                     <p style={{fontSize:'2rem', fontWeight:800, color:'var(--warning)', margin:0}}>
+                        {Math.floor(elapsedTime / 60)}m {elapsedTime % 60}s
+                     </p>
+                     <p style={{color:'var(--text-muted)', fontSize:'0.9rem', margin:'4px 0 0 0'}}>Time Taken</p>
+                  </div>
+               </div>
+            </div>
+
+            {sessionHistory.length > 0 && (
+               <div style={{background:'rgba(0,0,0,0.2)', border:'1px solid var(--border)', borderRadius:'var(--radius-md)', padding:'20px', marginBottom:'24px', textAlign:'left'}}>
+                  <h4 style={{margin:'0 0 16px 0', color:'white', fontSize:'1rem', display:'flex', alignItems:'center', gap:'8px'}}>📝 Attempted Questions</h4>
+                  <div className="custom-list">
+                     {sessionHistory.map((h, i) => (
+                        <li key={i}>{i+1}. {h.question}</li>
+                     ))}
+                  </div>
+               </div>
+            )}
+
+            <div style={{display:'flex', gap:'12px', justifyContent:'center', flexWrap:'wrap'}}>
+               <button className="btn-primary" onClick={()=>setIsSessionSummary(false)} style={{padding:'12px 24px', fontSize:'1rem'}}>
+                  🔄 Start New Session
+               </button>
+               <button className="btn-secondary" onClick={()=>window.location.reload()} style={{padding:'12px 24px', fontSize:'1rem'}}>
+                  🏠 Back to Dashboard
+               </button>
+            </div>
          </div>
        )}
     </div>
