@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { fetchAPI } from '../utils/api';
-
+import toast from 'react-hot-toast';
 export default function InterviewSimulator({ company }) {
   const [interviewConfig, setInterviewConfig] = useState({ type: 'DSA', difficulty: 'Medium' });
   const [isInterviewActive, setIsInterviewActive] = useState(false);
@@ -32,6 +32,10 @@ export default function InterviewSimulator({ company }) {
   const [sessionHistory, setSessionHistory] = useState([]);
   const [elapsedTime, setElapsedTime] = useState(0);
 
+  // Web Speech API states
+  const [isRecording, setIsRecording] = useState(false);
+  const [recognitionObj, setRecognitionObj] = useState(null);
+
   const codeTemplates = {
     c: `#include <stdio.h>\n\nint main() {\n    // write your code here\n    \n    return 0;\n}`,
     cpp: `#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    // write your code here\n    \n    return 0;\n}`,
@@ -49,6 +53,75 @@ export default function InterviewSimulator({ company }) {
     }
     return () => clearInterval(interval);
   }, [isInterviewActive, evaluation, submitResult]);
+
+  useEffect(() => {
+    // Initialize Web Speech API if supported
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recog = new SpeechRecognition();
+      recog.continuous = true;
+      recog.interimResults = true;
+      
+      recog.onresult = (event) => {
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript + ' ';
+          }
+        }
+        if (finalTranscript) {
+          setUserAnswer(prev => prev + (prev.trim() ? ' ' : '') + finalTranscript.trim());
+        }
+      };
+
+      recog.onerror = (event) => {
+        console.error("Speech recognition error", event.error);
+        if (event.error !== 'no-speech') {
+           toast.error(`Microphone error: ${event.error}`);
+        }
+        setIsRecording(false);
+      };
+
+      recog.onend = () => {
+         setIsRecording(false);
+      };
+      
+      setRecognitionObj(recog);
+    }
+  }, []);
+
+  const toggleRecording = () => {
+    if (!recognitionObj) {
+       toast.error("Browser does not support Speech Recognition. Try Chrome or Edge.");
+       return;
+    }
+    if (isRecording) {
+      recognitionObj.stop();
+      setIsRecording(false);
+    } else {
+      try {
+         recognitionObj.start();
+         setIsRecording(true);
+         toast.success("Recording started... Speak now.");
+      } catch (err) {
+         toast.error("Failed to start microphone.");
+      }
+    }
+  };
+
+  const speakQuestion = () => {
+    if (!('speechSynthesis' in window)) {
+      toast.error("Browser does not support Text-to-Speech.");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const textToSpeak = typeof currentQuestion === 'string' ? currentQuestion : currentQuestion?.title;
+    if (!textToSpeak) return;
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = 'en-US';
+    utterance.rate = 1.0;
+    window.speechSynthesis.speak(utterance);
+  };
   
   const formatTime = (secs) => `${Math.floor(secs / 60).toString().padStart(2, '0')}:${(secs % 60).toString().padStart(2, '0')}`;
 
@@ -67,7 +140,7 @@ export default function InterviewSimulator({ company }) {
   };
 
   const startInterview = async () => {
-    if (!company) { alert("Please set a Target Company in the Dashboard first!"); return; }
+    if (!company) { toast.error("Please set a Target Company in the Dashboard first!"); return; }
     setIsLoading(true);
     setSessionHistory([]);
     setIsSessionSummary(false);
@@ -102,7 +175,7 @@ export default function InterviewSimulator({ company }) {
     });
     
     if (data && data.error) {
-       alert(data.error);
+       toast.error(data.error);
        setIsInterviewActive(false);
        setIsLoading(false);
        return;
@@ -330,7 +403,7 @@ export default function InterviewSimulator({ company }) {
                         <span className={`badge ${interviewConfig.difficulty.toLowerCase()}`}>{interviewConfig.difficulty}</span>
                         <span className="badge" style={{background:'rgba(255,255,255,0.1)'}}>{company}</span>
                      </div>
-                     <p style={{lineHeight: '1.6', fontSize: '1rem', color:'#f8fafc'}}>{currentQuestion.description}</p>
+                     <p style={{lineHeight: '1.6', fontSize: '1rem', color:'#f8fafc', whiteSpace: 'pre-wrap'}}>{currentQuestion.description}</p>
                      
                      <h4 className="mt-4" style={{color:'white'}}>Examples:</h4>
                      <div style={{display:'flex', flexDirection:'column', gap:'15px'}}>
@@ -576,12 +649,20 @@ export default function InterviewSimulator({ company }) {
        {/* LEGACY VIEW FOR HR / TECHNICAL (NON-DSA) */}
        {isInterviewActive && interviewConfig.type !== 'DSA' && typeof currentQuestion === 'string' && (
          <div className="focus-container fade-in mt-4">
-            <h2 className="current-question">{currentQuestion}</h2>
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '15px'}}>
+               <h2 className="current-question" style={{margin: 0}}>{currentQuestion}</h2>
+               <button className="btn-secondary" onClick={speakQuestion} style={{padding: '8px 12px', borderRadius: '50%'}} title="Read Question Out Loud">
+                 🔊
+               </button>
+            </div>
             {!evaluation ? (
               <div className="interactive-coding-environment mt-4">
-                <textarea className="text-input" style={{height:'200px', fontSize:'1rem'}} placeholder="Type your answer here..." value={userAnswer} onChange={(e)=>setUserAnswer(e.target.value)}></textarea>
-                <div style={{marginTop:'15px'}}>
-                   <button className="btn-primary" onClick={submitAnswerText} disabled={!userAnswer.trim() || isLoading}>🚀 Submit Answer</button>
+                <textarea className="text-input" style={{height:'200px', fontSize:'1rem', borderColor: isRecording ? 'var(--primary)' : 'var(--border)', transition: 'all 0.3s'}} placeholder="Type your answer here or click the microphone to speak..." value={userAnswer} onChange={(e)=>setUserAnswer(e.target.value)}></textarea>
+                <div style={{marginTop:'15px', display: 'flex', gap: '15px'}}>
+                   <button className={`btn-primary ${isRecording ? 'recording' : ''}`} onClick={toggleRecording} style={isRecording ? {background: 'var(--danger)', borderColor: 'var(--danger)'} : {background: 'var(--bg-secondary)', color: 'white', borderColor: 'var(--border)'}}>
+                      {isRecording ? '⏹️ Stop Recording' : '🎤 Start Voice Answer'}
+                   </button>
+                   <button className="btn-primary" onClick={submitAnswerText} disabled={!userAnswer.trim() || isLoading || isRecording}>🚀 Submit Answer</button>
                 </div>
               </div>
             ) : (

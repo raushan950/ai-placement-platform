@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { fetchAPI } from '../utils/api';
+import toast from 'react-hot-toast';
 
 export default function AuthScreen({ onLogin }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,12 +19,13 @@ export default function AuthScreen({ onLogin }) {
     const data = await fetchAPI(endpoint, { email, password });
     
     if (data && data.error) {
-      setError(data.error);
+      toast.error(data.error);
     } else if (data && data.token) {
       localStorage.setItem('token', data.token);
+      toast.success(isLogin ? 'Logged in successfully!' : 'Account created successfully!');
       onLogin(data.user);
     } else {
-      setError('Something went wrong. Please try again.');
+      toast.error('Something went wrong. Please try again.');
     }
     setIsLoading(false);
   };
@@ -58,7 +60,7 @@ export default function AuthScreen({ onLogin }) {
             />
           </div>
           
-          {error && <div className="error-banner fade-in mt-4" style={{padding: '10px'}}>{error}</div>}
+
 
           <button type="submit" className="btn-primary" style={{width: '100%', marginTop: '30px', padding: '14px', fontSize: '1.05rem'}} disabled={isLoading}>
             {isLoading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Account')}

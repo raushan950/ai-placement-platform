@@ -1,8 +1,7 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 export default function Sidebar({ 
-  activeTab, 
-  handleNavClick, 
   sidebarOpen, 
   setSidebarOpen, 
   streak, 
@@ -13,18 +12,18 @@ export default function Sidebar({
     <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
       <h2 className="logo">Placement<span>AI</span></h2>
       <nav className="nav-links">
-        <button className={`nav-btn ${activeTab==='roadmap'?'active':''}`} onClick={()=>handleNavClick('roadmap')}>
+        <NavLink to="/dashboard" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
           <span>📅</span> Daily Roadmap
-        </button>
-        <button className={`nav-btn ${activeTab==='resume'?'active':''}`} onClick={()=>handleNavClick('resume')}>
+        </NavLink>
+        <NavLink to="/resume" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
           <span>📄</span> Resume Analyzer
-        </button>
-        <button className={`nav-btn ${activeTab==='prep'?'active':''}`} onClick={()=>handleNavClick('prep')}>
+        </NavLink>
+        <NavLink to="/prep" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
           <span>🎯</span> Interview Simulator
-        </button>
-        <button className={`nav-btn ${activeTab==='mock'?'active':''}`} onClick={()=>handleNavClick('mock')}>
+        </NavLink>
+        <NavLink to="/mock" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
           <span>📝</span> Live Mock Test
-        </button>
+        </NavLink>
       </nav>
       
       <div className="stats-box mt-4">

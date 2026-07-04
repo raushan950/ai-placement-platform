@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import { fetchAPI } from './utils/api';
-
+import { Toaster } from 'react-hot-toast';
 // Components
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
@@ -12,8 +13,7 @@ import AuthScreen from './components/AuthScreen';
 
 export default function App() {
   const [user, setUser] = useState(null);
-  
-  const [activeTab, setActiveTab] = useState('roadmap');
+  const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   
   // Dashboard & Global State
@@ -21,26 +21,43 @@ export default function App() {
   const [completed, setCompleted] = useState(new Set());
   const [streak, setStreak] = useState(0);
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   // Check Local Storage for Auth
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('token');
       if (token) {
         const data = await fetchAPI('/me', {}, 'GET');
-        if (data && data.user) handleLoginSuccess(data.user);
-        else localStorage.removeItem('token');
+        if (data && data.user) {
+          await handleLoginSuccess(data.user, false);
+        } else {
+          localStorage.removeItem('token');
+        }
       }
+      setLoading(false);
     };
     checkAuth();
+    // eslint-disable-next-line
   }, []);
 
-  const handleLoginSuccess = (userData) => {
+  const handleLoginSuccess = async (userData, redirect = true) => {
     setUser(userData);
     setStreak(userData.streak || 0);
-    if (userData.progress) {
-       // Convert progress object to Set of string keys where value is true
-       const completedKeys = Object.keys(userData.progress).filter(k => userData.progress[k]);
+    if (userData.completedTasks) {
+       const completedKeys = Object.keys(userData.completedTasks).filter(k => userData.completedTasks[k]);
        setCompleted(new Set(completedKeys));
+    }
+    
+    // Fetch roadmap
+    const rmData = await fetchAPI('/my-roadmap', {}, 'GET');
+    if (rmData && rmData.data && rmData.data.length > 0) {
+        setRoadmap(rmData.data);
+    }
+
+    if (redirect) {
+      navigate('/dashboard');
     }
   };
 
@@ -50,6 +67,7 @@ export default function App() {
     setRoadmap([]);
     setCompleted(new Set());
     setStreak(0);
+    navigate('/login');
   };
 
   const toggleTask = async (dayIndex) => {
@@ -69,55 +87,68 @@ export default function App() {
     }
   };
 
-  const handleNavClick = (tab) => {
-    setActiveTab(tab);
-    setSidebarOpen(false);
-  };
-
   const getPageTitle = () => {
-    switch(activeTab) {
-      case 'roadmap': return 'Daily Roadmap';
-      case 'resume': return 'Resume Analyzer';
-      case 'prep': return 'Interview Simulator';
-      case 'mock': return 'Mock Assessment';
-      default: return 'Dashboard';
-    }
+    const path = location.pathname;
+    if (path.includes('/resume')) return 'Resume Analyzer';
+    if (path.includes('/prep')) return 'Interview Simulator';
+    if (path.includes('/mock')) return 'Mock Assessment';
+    return 'Daily Roadmap';
   };
 
   const progress = roadmap.length ? Math.round((completed.size / roadmap.length) * 100) : 0;
 
-  if (!user) {
-    return <AuthScreen onLogin={handleLoginSuccess} />;
+  if (loading) {
+    return <div className="loading-screen" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: '#fff' }}>Loading...</div>;
+  }
+
+  // Auth routing implementation
+  if (!user && location.pathname !== '/login') {
+    return <Navigate to="/login" replace />;
   }
 
   return (
-    <div className="app-container">
-      <Sidebar 
-        activeTab={activeTab} 
-        handleNavClick={handleNavClick} 
-        sidebarOpen={sidebarOpen} 
-        setSidebarOpen={setSidebarOpen} 
-        streak={streak} 
-        progress={progress} 
-        onLogout={handleLogout}
-      />
-
-      <div className="main-wrapper">
-        <div className="top-navbar">
-          <button className="mobile-menu-btn" onClick={()=>setSidebarOpen(!sidebarOpen)}>☰</button>
-          <h2>{getPageTitle()}</h2>
-          <div className="user-profile" style={{display: 'flex', alignItems: 'center', gap: '10px', marginLeft: 'auto'}}>
-             <span style={{color: 'var(--text-muted)', fontSize: '0.9rem'}}>👤 {user.email.split('@')[0]}</span>
-          </div>
-        </div>
+    <>
+      <Toaster position="top-right" />
+      
+      <Routes>
+        <Route path="/login" element={
+          !user ? <AuthScreen onLogin={(user) => handleLoginSuccess(user, true)} /> : <Navigate to="/dashboard" replace />
+        } />
         
-        <main className="content-area">
-          {activeTab === 'roadmap' && <Dashboard roadmap={roadmap} setRoadmap={setRoadmap} completed={completed} toggleTask={toggleTask} />}
-          {activeTab === 'resume' && <ResumeAnalyzer />}
-          {activeTab === 'prep' && <InterviewSimulator company="Tech Company" />}
-          {activeTab === 'mock' && <MockTest />}
-        </main>
-      </div>
-    </div>
+        <Route path="/*" element={
+          user ? (
+            <div className="app-container">
+              <Sidebar 
+                sidebarOpen={sidebarOpen} 
+                setSidebarOpen={setSidebarOpen} 
+                streak={streak} 
+                progress={progress} 
+                onLogout={handleLogout}
+              />
+
+              <div className="main-wrapper">
+                <div className="top-navbar">
+                  <button className="mobile-menu-btn" onClick={()=>setSidebarOpen(!sidebarOpen)}>☰</button>
+                  <h2>{getPageTitle()}</h2>
+                  <div className="user-profile" style={{display: 'flex', alignItems: 'center', gap: '10px', marginLeft: 'auto'}}>
+                    <span style={{color: 'var(--text-muted)', fontSize: '0.9rem'}}>👤 {user?.email.split('@')[0]}</span>
+                  </div>
+                </div>
+                
+                <main className="content-area">
+                  <Routes>
+                    <Route path="/dashboard" element={<Dashboard roadmap={roadmap} setRoadmap={setRoadmap} completed={completed} toggleTask={toggleTask} />} />
+                    <Route path="/resume" element={<ResumeAnalyzer />} />
+                    <Route path="/prep" element={<InterviewSimulator company="Tech Company" />} />
+                    <Route path="/mock" element={<MockTest />} />
+                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                  </Routes>
+                </main>
+              </div>
+            </div>
+          ) : <Navigate to="/login" replace />
+        } />
+      </Routes>
+    </>
   );
 }
