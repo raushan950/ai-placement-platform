@@ -9,7 +9,12 @@ import Dashboard from './components/Dashboard';
 import ResumeAnalyzer from './components/ResumeAnalyzer';
 import InterviewSimulator from './components/InterviewSimulator';
 import MockTest from './components/MockTest';
+import History from './components/History';
 import AuthScreen from './components/AuthScreen';
+import LandingPage from './components/LandingPage';
+import Problems from './components/Problems';
+import Contests from './components/Contests';
+import Aptitude from './components/Aptitude';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -90,8 +95,12 @@ export default function App() {
   const getPageTitle = () => {
     const path = location.pathname;
     if (path.includes('/resume')) return 'Resume Analyzer';
+    if (path.includes('/problems')) return 'Practice Problems';
     if (path.includes('/prep')) return 'Interview Simulator';
     if (path.includes('/mock')) return 'Mock Assessment';
+    if (path.includes('/history')) return 'History & Analytics';
+    if (path.includes('/contests')) return 'Weekly Contests';
+    if (path.includes('/aptitude')) return 'Aptitude Practice';
     return 'Daily Roadmap';
   };
 
@@ -111,6 +120,10 @@ export default function App() {
       <Toaster position="top-right" />
       
       <Routes>
+        <Route path="/" element={
+          !user ? <LandingPage /> : <Navigate to="/dashboard" replace />
+        } />
+        
         <Route path="/login" element={
           !user ? <AuthScreen onLogin={(user) => handleLoginSuccess(user, true)} /> : <Navigate to="/dashboard" replace />
         } />
@@ -131,7 +144,12 @@ export default function App() {
                   <button className="mobile-menu-btn" onClick={()=>setSidebarOpen(!sidebarOpen)}>☰</button>
                   <h2>{getPageTitle()}</h2>
                   <div className="user-profile" style={{display: 'flex', alignItems: 'center', gap: '10px', marginLeft: 'auto'}}>
-                    <span style={{color: 'var(--text-muted)', fontSize: '0.9rem'}}>👤 {user?.email.split('@')[0]}</span>
+                    {user?.avatar ? (
+                      <img src={user.avatar} alt="Profile" style={{width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--primary)'}} />
+                    ) : (
+                      <span style={{fontSize: '1.1rem'}}>👤</span>
+                    )}
+                    <span style={{color: 'var(--text-muted)', fontSize: '0.9rem'}}>{user?.name || user?.email.split('@')[0]}</span>
                   </div>
                 </div>
                 
@@ -139,8 +157,12 @@ export default function App() {
                   <Routes>
                     <Route path="/dashboard" element={<Dashboard roadmap={roadmap} setRoadmap={setRoadmap} completed={completed} toggleTask={toggleTask} />} />
                     <Route path="/resume" element={<ResumeAnalyzer />} />
+                    <Route path="/problems" element={<Problems />} />
                     <Route path="/prep" element={<InterviewSimulator company="Tech Company" />} />
                     <Route path="/mock" element={<MockTest />} />
+                    <Route path="/contests" element={<Contests />} />
+                    <Route path="/aptitude" element={<Aptitude />} />
+                    <Route path="/history" element={<History />} />
                     <Route path="*" element={<Navigate to="/dashboard" replace />} />
                   </Routes>
                 </main>

@@ -59,6 +59,14 @@ Vercel is optimized for React/Vite applications.
 ## Post-Deployment Checklist
 - [ ] Create a user account on your live frontend.
 - [ ] Check if the Backend receives the login requests (use Render Logs).
-- [ ] Test the Interview Simulator. Make sure your local Judge0 RapidAPI Key is provided in the simulator interface.
+- [ ] Configure `RAPIDAPI_KEY` inside backend environment variables to enable native Judge0 compilation and LeetCode-style assessments execution.
+- [ ] Configure SMTP Email dispatch parameters to support 100% robust email OTP delivery:
+  - `SMTP_HOST`: e.g. `smtp.gmail.com`
+  - `SMTP_PORT`: e.g. `465` (SSL) or `587` (STARTTLS)
+  - `SMTP_USER`: SMTP username or Gmail address
+  - `SMTP_PASS`: SMTP password or App Password
+  - `EMAIL_FROM`: sender address display name
+- [ ] Test the Interview Simulator.
 
 **Your Premium Platform is now Live! 🚀**
+

@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { fetchAPI } from '../utils/api';
+import DashboardCharts from './DashboardCharts';
 
 export default function Dashboard({ roadmap, setRoadmap, completed, toggleTask }) {
   const [company, setCompany] = useState('');
   const [days, setDays] = useState('');
   const [level, setLevel] = useState('beginner');
   const [isLoading, setIsLoading] = useState(false);
+
+  const [resumeReports, setResumeReports] = useState([]);
+  const [interviewSessions, setInterviewSessions] = useState([]);
+  const [mockTestSessions, setMockTestSessions] = useState([]);
+
+  useEffect(() => {
+    const loadAnalytics = async () => {
+      try {
+        const resData = await fetchAPI('/resume-history', {}, 'GET');
+        const intData = await fetchAPI('/interview-history', {}, 'GET');
+        const mockData = await fetchAPI('/mocktest-history', {}, 'GET');
+        if (Array.isArray(resData)) setResumeReports(resData);
+        if (Array.isArray(intData)) setInterviewSessions(intData);
+        if (Array.isArray(mockData)) setMockTestSessions(mockData);
+      } catch (err) {
+        console.warn("Analytics data fetch failed.");
+      }
+    };
+    loadAnalytics();
+  }, []);
 
   const handleGenerateRoadmap = async (e) => {
     e.preventDefault();
@@ -23,6 +44,12 @@ export default function Dashboard({ roadmap, setRoadmap, completed, toggleTask }
         <h1>Welcome back! 👋</h1>
         <p>Let's build your personalized action plan.</p>
       </header>
+      
+      <DashboardCharts 
+        resumeReports={resumeReports} 
+        interviewSessions={interviewSessions} 
+        mockTestSessions={mockTestSessions} 
+      />
       
       <form className="glass-panel" onSubmit={handleGenerateRoadmap} style={{marginBottom: '40px'}}>
         <div className="grid-form">

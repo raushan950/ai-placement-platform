@@ -15,14 +15,27 @@ export default function Sidebar({
         <NavLink to="/dashboard" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
           <span>📅</span> Daily Roadmap
         </NavLink>
+        <NavLink to="/problems" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <span>💻</span> Practice Problems
+        </NavLink>
+        <NavLink to="/mock" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <span>📝</span> Live Mock Test
+        </NavLink>
+        <NavLink to="/contests" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <span>🏆</span> Weekly Contests
+        </NavLink>
+        <NavLink to="/aptitude" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <span>🧮</span> Aptitude Practice
+        </NavLink>
+
         <NavLink to="/resume" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
           <span>📄</span> Resume Analyzer
         </NavLink>
         <NavLink to="/prep" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
           <span>🎯</span> Interview Simulator
         </NavLink>
-        <NavLink to="/mock" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
-          <span>📝</span> Live Mock Test
+        <NavLink to="/history" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <span>📊</span> History & Analytics
         </NavLink>
       </nav>
       
