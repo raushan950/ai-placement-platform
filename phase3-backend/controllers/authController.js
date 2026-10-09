@@ -122,10 +122,10 @@ exports.googleLogin = async (req, res, next) => {
 
     let email, name, avatar;
 
-    // Check for simulated/mock Google login in development environments
+    // Mock authentication is opt-in for local development only.
     if (typeof idToken === 'string' && idToken.startsWith('mock_google_token_')) {
-      if (process.env.NODE_ENV === 'production') {
-        return res.status(400).json({ error: "Mock Google login is disabled in production." });
+      if (process.env.NODE_ENV !== 'development' || process.env.ALLOW_MOCK_AUTH !== 'true') {
+        return res.status(401).json({ error: "Mock Google login is disabled." });
       }
       
       const parts = idToken.split('_');
@@ -231,10 +231,8 @@ exports.sendOtp = async (req, res, next) => {
     // Dispatch email
     const emailResult = await sendOtpEmail(email, otpCode, reason);
 
-    res.json({ 
-      message: "Verification code sent successfully!", 
-      // Return code in dev environment to allow easy bypass/testing
-      code: process.env.NODE_ENV !== 'production' ? otpCode : undefined,
+    res.json({
+      message: "Verification code sent successfully!",
       method: emailResult.method
     });
   } catch (err) {

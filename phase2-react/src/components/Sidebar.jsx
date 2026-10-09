@@ -27,6 +27,15 @@ export default function Sidebar({
         <NavLink to="/aptitude" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
           <span>🧮</span> Aptitude Practice
         </NavLink>
+        <NavLink to="/experiences" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <span>🗣️</span> Interview Experiences
+        </NavLink>
+        <NavLink to="/revision" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <span>📚</span> Revision Hub
+        </NavLink>
+        <NavLink to="/projects" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <span>🧭</span> Project Ideas
+        </NavLink>
 
         <NavLink to="/resume" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
           <span>📄</span> Resume Analyzer

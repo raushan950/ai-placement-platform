@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm install vite && vite build",
+    "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -20,6 +20,12 @@
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
+    "dompurify": "^3.4.14",
     "vite": "^5.4.21"
+  },
+  "overrides": {
+    "monaco-editor": {
+      "dompurify": "^3.4.14"
+    }
   }
 }

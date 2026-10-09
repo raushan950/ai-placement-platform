@@ -1,10 +1,14 @@
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+export const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:5000/api' : '');
 
 // Detect if we are in production but calling localhost
 const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
 const isCallingLocalhost = API_URL.includes('localhost') || API_URL.includes('127.0.0.1');
 
 export const fetchAPI = async (endpoint, payload, method = "POST", isFormData = false) => {
+  if (!API_URL) {
+    return { error: 'Application configuration error: VITE_API_URL is not configured.' };
+  }
+
   if (isProduction && isCallingLocalhost) {
     console.error("❌ Production misconfiguration: VITE_API_URL is missing or set to localhost.");
     return { error: 'Application configuration error: Production frontend cannot connect to a local API server. Please configure VITE_API_URL in Vercel.' };
