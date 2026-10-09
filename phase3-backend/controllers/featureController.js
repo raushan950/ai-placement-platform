@@ -332,6 +332,10 @@ exports.executeCode = async (req, res, next) => {
          }
        }
     } else {
+       if (process.env.NODE_ENV === 'production') {
+         return res.status(503).json({ error: "Code execution service is unavailable. Configure Judge0 before enabling submissions." });
+       }
+
        // FALLBACK: semantic simulation using Gemini
        const testcaseSubset = isSubmit ? testcases : [testcases[0]];
        const prompt = `You are a strict technical interviewer evaluating a candidate's code.
@@ -396,6 +400,10 @@ exports.executeCode = async (req, res, next) => {
 
   } catch (err) {
     console.warn("⚠️ Sandbox failed, falling back to Gemini semantic simulation:", err.message);
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(503).json({ error: "Code execution service is unavailable. Configure Judge0 before enabling submissions." });
+    }
+
     try {
       const testcaseSubset = isSubmit ? testcases : [testcases[0]];
       const prompt = `You are a strict technical interviewer evaluating a candidate's code.

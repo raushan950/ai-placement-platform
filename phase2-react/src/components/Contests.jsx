@@ -396,7 +396,7 @@ export default function Contests() {
             <div style={{ position: 'absolute', top: 0, right: 0, width: '150px', height: '150px', background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(0,0,0,0) 70%)', pointerEvents: 'none' }}></div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
               <div>
-                <span style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#fca5a5', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '4px 10px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>LIVE CONTEST</span>
+                <span style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#93c5fd', border: '1px solid rgba(59, 130, 246, 0.2)', padding: '4px 10px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>PRACTICE CONTEST</span>
                 <h3 style={{ color: 'white', fontSize: '1.4rem', fontWeight: 800, marginTop: '8px', marginBottom: '6px' }}>Weekly Contest 42</h3>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0 }}>45 minutes | 2 Coding Problems | 250 Max Points</p>
               </div>
@@ -415,7 +415,7 @@ export default function Contests() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {loadingContests ? (
                 <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
-                  <span>Loading live Codeforces schedule...</span>
+                  <span>Loading practice contest schedule...</span>
                 </div>
               ) : externalContests.length > 0 ? (
                 externalContests.map((c) => (
@@ -440,7 +440,7 @@ export default function Contests() {
 
         {/* Right Side: Leaderboard */}
         <div className="glass-panel" style={{ padding: '24px' }}>
-          <h3 style={{ color: 'white', margin: '0 0 16px 0', fontSize: '1.1rem' }}>Weekly Contest Leaderboard</h3>
+          <h3 style={{ color: 'white', margin: '0 0 16px 0', fontSize: '1.1rem' }}>Practice Leaderboard</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {LEADERBOARD_MOCK.map((user) => (
               <div 

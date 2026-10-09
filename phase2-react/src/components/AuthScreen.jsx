@@ -26,6 +26,7 @@ export default function AuthScreen({ onLogin }) {
 
   // Google Sign-In SDK configuration
   const clientID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+  const mockAuthEnabled = import.meta.env.DEV && import.meta.env.VITE_ALLOW_MOCK_AUTH === 'true';
 
   // Simulated Google Sign-In states
   const [showGoogleModal, setShowGoogleModal] = useState(false);
@@ -572,14 +573,14 @@ export default function AuthScreen({ onLogin }) {
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
                   Resend code in <strong style={{ color: '#fff' }}>{timer}s</strong>
                 </p>
-              ) : (
+              ) : mockAuthEnabled ? (
                 <span
                   onClick={handleRequestOtp}
                   style={{ color: 'var(--primary)', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600 }}
                 >
                   Resend Code
                 </span>
-              )}
+              ) : null}
             </div>
           </form>
         )}

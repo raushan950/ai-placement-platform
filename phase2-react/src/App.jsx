@@ -15,6 +15,9 @@ import LandingPage from './components/LandingPage';
 import Problems from './components/Problems';
 import Contests from './components/Contests';
 import Aptitude from './components/Aptitude';
+import Experiences from './components/Experiences';
+import Revision from './components/Revision';
+import ProjectRecommendations from './components/ProjectRecommendations';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -101,6 +104,9 @@ export default function App() {
     if (path.includes('/history')) return 'History & Analytics';
     if (path.includes('/contests')) return 'Weekly Contests';
     if (path.includes('/aptitude')) return 'Aptitude Practice';
+    if (path.includes('/experiences')) return 'Interview Experiences';
+    if (path.includes('/revision')) return 'Revision Hub';
+    if (path.includes('/projects')) return 'Project Recommendations';
     return 'Daily Roadmap';
   };
 
@@ -162,6 +168,9 @@ export default function App() {
                     <Route path="/mock" element={<MockTest />} />
                     <Route path="/contests" element={<Contests />} />
                     <Route path="/aptitude" element={<Aptitude />} />
+                    <Route path="/experiences" element={<Experiences />} />
+                    <Route path="/revision" element={<Revision />} />
+                    <Route path="/projects" element={<ProjectRecommendations />} />
                     <Route path="/history" element={<History />} />
                     <Route path="*" element={<Navigate to="/dashboard" replace />} />
                   </Routes>
