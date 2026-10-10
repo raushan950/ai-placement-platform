@@ -1,23 +1,20 @@
 // Using Node's native fetch (available in Node 18+)
 
 const LANGUAGE_MAPPING = {
-  'c': 74,          // C (GCC 13)
-  'cpp': 75,        // C++ (GCC 13)
-  'java': 91,       // Java (OpenJDK 17)
-  'python': 92,     // Python (3.11.2)
-  'javascript': 93  // JavaScript (Node.js 18)
+  'c': 103,
+  'cpp': 105,
+  'java': 91,
+  'python': 92,
+  'javascript': 93
 };
 
 /**
- * Execute code securely using Judge0 API (via RapidAPI).
- * Falls back to null if RapidAPI credentials are not present.
+ * Execute code using Judge0 CE, preferring RapidAPI when credentials are set.
  */
 const executeCodeOnSandbox = async (language, sourceCode, stdin = '') => {
   const apiKey = process.env.RAPIDAPI_KEY;
-  if (!apiKey || apiKey === 'your_rapidapi_key_here') {
-    console.log("ℹ️ No RAPIDAPI_KEY found, bypassing Judge0 compile sandbox.");
-    return null;
-  }
+  const useRapidApi = Boolean(apiKey && apiKey !== 'your_rapidapi_key_here');
+  const apiBaseUrl = useRapidApi ? 'https://judge0-ce.p.rapidapi.com' : 'https://ce.judge0.com';
 
   const langId = LANGUAGE_MAPPING[language.toLowerCase()];
   if (!langId) {
@@ -28,12 +25,14 @@ const executeCodeOnSandbox = async (language, sourceCode, stdin = '') => {
   const sourceBase64 = Buffer.from(sourceCode).toString('base64');
   const stdinBase64 = Buffer.from(stdin).toString('base64');
 
-  const url = 'https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&wait=false';
+  const url = `${apiBaseUrl}/submissions?base64_encoded=true&wait=${useRapidApi ? 'false' : 'true'}`;
   const headers = {
-    'content-type': 'application/json',
-    'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
-    'x-rapidapi-key': apiKey
+    'content-type': 'application/json'
   };
+  if (useRapidApi) {
+    headers['x-rapidapi-host'] = 'judge0-ce.p.rapidapi.com';
+    headers['x-rapidapi-key'] = apiKey;
+  }
 
   try {
     const response = await fetch(url, {
@@ -51,28 +50,36 @@ const executeCodeOnSandbox = async (language, sourceCode, stdin = '') => {
       throw new Error(`Judge0 API create submission failed: ${errText}`);
     }
 
-    const { token } = await response.json();
-    if (!token) throw new Error("Did not receive a token from Judge0.");
+    let result = await response.json();
 
-    // Poll Judge0 until execution is done
-    let statusId = 1; // 1: In Queue, 2: Processing, 3: Accepted, etc.
-    let attempts = 0;
-    let result = null;
+    if (useRapidApi) {
+      const { token } = result;
+      if (!token) throw new Error("Did not receive a token from Judge0.");
 
-    while ((statusId === 1 || statusId === 2) && attempts < 15) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      attempts++;
+      let statusId = 1;
+      let attempts = 0;
 
-      const statusRes = await fetch(`https://judge0-ce.p.rapidapi.com/submissions/${token}?base64_encoded=true`, {
-        headers
-      });
+      while ((statusId === 1 || statusId === 2) && attempts < 15) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        attempts++;
 
-      if (!statusRes.ok) {
-        throw new Error(`Judge0 status query failed: ${statusRes.statusText}`);
+        const statusRes = await fetch(`${apiBaseUrl}/submissions/${token}?base64_encoded=true`, {
+          headers
+        });
+
+        if (!statusRes.ok) {
+          throw new Error(`Judge0 status query failed: ${statusRes.statusText}`);
+        }
+
+        result = await statusRes.json();
+        statusId = result.status_id;
       }
 
-      result = await statusRes.json();
-      statusId = result.status_id;
+      if (statusId === 1 || statusId === 2) {
+        throw new Error("Timed out waiting for sandbox execution.");
+      }
+    } else if (result.status_id === 1 || result.status_id === 2) {
+      throw new Error("Judge0 CE returned before execution completed.");
     }
 
     if (!result) throw new Error("Timed out waiting for sandbox execution.");

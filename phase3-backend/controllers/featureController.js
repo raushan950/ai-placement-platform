@@ -294,10 +294,12 @@ exports.executeCode = async (req, res, next) => {
     let results = [];
     let feedback = "Ran on code execution simulation.";
 
-    // Check if RAPIDAPI_KEY is configured
     const apiKey = process.env.RAPIDAPI_KEY;
-    if (apiKey && apiKey !== 'your_rapidapi_key_here') {
-       feedback = "Ran on secure sandbox compilation engine.";
+     const hasRapidApiKey = Boolean(apiKey && apiKey !== 'your_rapidapi_key_here');
+     if (hasRapidApiKey || process.env.NODE_ENV === 'production') {
+       feedback = hasRapidApiKey
+        ? "Ran on secure sandbox compilation engine."
+        : "Ran on Judge0 Community Edition sandbox.";
        const testcaseSubset = isSubmit ? testcases : [testcases[0]];
        
        for (const tc of testcaseSubset) {
@@ -332,10 +334,6 @@ exports.executeCode = async (req, res, next) => {
          }
        }
     } else {
-       if (process.env.NODE_ENV === 'production') {
-         return res.status(503).json({ error: "Code execution service is unavailable. Configure Judge0 before enabling submissions." });
-       }
-
        // FALLBACK: semantic simulation using Gemini
        const testcaseSubset = isSubmit ? testcases : [testcases[0]];
        const prompt = `You are a strict technical interviewer evaluating a candidate's code.
