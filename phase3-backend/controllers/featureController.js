@@ -9,7 +9,7 @@ const { callGemini } = require('../utils/gemini');
 const fs = require('fs');
 const path = require('path');
 const pdfParse = require('pdf-parse');
-const { executeCodeOnSandbox } = require('../utils/judge0');
+const { executeCodeOnSandbox, buildCppSolutionHarness } = require('../utils/judge0');
 
 let questionDB = {};
 try {
@@ -303,7 +303,14 @@ exports.executeCode = async (req, res, next) => {
        const testcaseSubset = isSubmit ? testcases : [testcases[0]];
        
        for (const tc of testcaseSubset) {
-         const runResult = await executeCodeOnSandbox(language, source_code, tc.input);
+         const cppHarness = language.toLowerCase() === 'cpp'
+           ? buildCppSolutionHarness(source_code, tc.input || '')
+           : null;
+         const runResult = await executeCodeOnSandbox(
+           language,
+           cppHarness || source_code,
+           cppHarness ? '' : tc.input
+         );
          if (runResult) {
            if (runResult.compile_output && runResult.status.includes("Compilation Error")) {
              compileErr = runResult.compile_output;
