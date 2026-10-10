@@ -8,6 +8,50 @@ const LANGUAGE_MAPPING = {
   'javascript': 93
 };
 
+const buildCppSolutionHarness = (sourceCode, stdin) => {
+  if (!/\bclass\s+Solution\b/.test(sourceCode) || /\bmain\s*\(/.test(sourceCode)) return null;
+
+  const signature = sourceCode.match(/\b(bool|int|long\s+long|double|string|std::string|vector\s*<\s*int\s*>)\s+(\w+)\s*\(([^)]*)\)\s*\{/);
+  if (!signature) return null;
+
+  const [, returnType, methodName, rawParameters] = signature;
+  const lines = stdin.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+  let inputIndex = 0;
+  const argumentsList = [];
+  const declarations = [];
+
+  for (const rawParameter of rawParameters.split(',').filter(parameter => parameter.trim())) {
+    const parameter = rawParameter.trim().match(/^(.*?)\s+([A-Za-z_]\w*)$/);
+    if (!parameter) return null;
+
+    const type = parameter[1].replace(/\bconst\b/g, '').replace(/\bstd::/g, '').replace(/[&*]/g, '').replace(/\s+/g, '').trim();
+    const line = lines[inputIndex++];
+    if (!line) return null;
+
+    if (type === 'vector<int>') {
+      const arrayLiteral = line.match(/\[[^\]]*\]/)?.[0];
+      if (!arrayLiteral) return null;
+      const values = arrayLiteral.match(/-?\d+/g) || [];
+      const variableName = parameter[2];
+      declarations.push(`vector<int> ${variableName}{${values.join(',')}};`);
+      argumentsList.push(variableName);
+    } else if (['int', 'longlong', 'double', 'bool'].includes(type)) {
+      const scalar = line.includes('=') ? line.slice(line.lastIndexOf('=') + 1).trim() : line;
+      const value = scalar.match(/-?(?:\d+\.?\d*|\.\d+)/)?.[0];
+      if (!value) return null;
+      argumentsList.push(value);
+    } else if (type === 'string') {
+      const rawValue = line.includes('=') ? line.slice(line.indexOf('=') + 1).trim() : line;
+      const value = rawValue.replace(/^(["'])(.*)\1$/, '$2');
+      argumentsList.push(JSON.stringify(value));
+    } else {
+      return null;
+    }
+  }
+
+  return `#include <bits/stdc++.h>\nusing namespace std;\n${sourceCode}\ntemplate <typename T> void printResult(const T& value) { cout << boolalpha << value; }\ntemplate <typename T> void printResult(const vector<T>& values) { cout << '['; for (size_t i = 0; i < values.size(); ++i) { if (i) cout << ','; printResult(values[i]); } cout << ']'; }\nint main() { ${declarations.join(' ')} Solution solution; auto result = solution.${methodName}(${argumentsList.join(', ')}); printResult(result); return 0; }`;
+};
+
 /**
  * Execute code using Judge0 CE, preferring RapidAPI when credentials are set.
  */
@@ -104,4 +148,4 @@ const executeCodeOnSandbox = async (language, sourceCode, stdin = '') => {
   }
 };
 
-module.exports = { executeCodeOnSandbox };
+module.exports = { executeCodeOnSandbox, buildCppSolutionHarness };
