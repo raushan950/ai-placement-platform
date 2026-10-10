@@ -59,7 +59,7 @@ Vercel is optimized for React/Vite applications.
 ## Post-Deployment Checklist
 - [ ] Create a user account on your live frontend.
 - [ ] Check if the Backend receives the login requests (use Render Logs).
-- [ ] Configure `RAPIDAPI_KEY` inside backend environment variables to enable native Judge0 compilation and LeetCode-style assessments execution.
+- [ ] Code submissions use Judge0 Community Edition by default. Configure `RAPIDAPI_KEY` on the backend for the dedicated RapidAPI endpoint; the public endpoint may be rate-limited or temporarily unavailable.
 - [ ] Configure SMTP Email dispatch parameters to support 100% robust email OTP delivery:
   - `SMTP_HOST`: e.g. `smtp.gmail.com`
   - `SMTP_PORT`: e.g. `465` (SSL) or `587` (STARTTLS)
